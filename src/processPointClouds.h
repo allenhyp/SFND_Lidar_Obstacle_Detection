@@ -15,9 +15,11 @@
 #include <iostream> 
 #include <string>  
 #include <vector>
+#include <unordered_set>
 #include <ctime>
 #include <chrono>
 #include "render/box.h"
+#include "quiz/cluster/kdtree.h"
 
 template<typename PointT>
 class ProcessPointClouds {
@@ -30,6 +32,10 @@ public:
 
     void numPoints(typename pcl::PointCloud<PointT>::Ptr cloud);
 
+    pcl::PointIndices::Ptr RansacPlane(typename pcl::PointCloud<PointT>::Ptr cloud, int maxIterations, float distanceTol);
+
+    void proximity(int indice, const std::vector<std::vector<float>>& points, std::vector<int>& cluster, std::vector<bool>& processed, KdTree* tree, float distanceTol);
+
     typename pcl::PointCloud<PointT>::Ptr FilterCloud(typename pcl::PointCloud<PointT>::Ptr cloud, float filterRes, Eigen::Vector4f minPoint, Eigen::Vector4f maxPoint);
 
     std::pair<typename pcl::PointCloud<PointT>::Ptr, typename pcl::PointCloud<PointT>::Ptr> SeparateClouds(pcl::PointIndices::Ptr inliers, typename pcl::PointCloud<PointT>::Ptr cloud);
@@ -39,6 +45,8 @@ public:
     std::vector<typename pcl::PointCloud<PointT>::Ptr> Clustering(typename pcl::PointCloud<PointT>::Ptr cloud, float clusterTolerance, int minSize, int maxSize);
 
     Box BoundingBox(typename pcl::PointCloud<PointT>::Ptr cluster);
+
+    BoxQ BoundingBoxQuaternion(typename pcl::PointCloud<PointT>::Ptr cluster);
 
     void savePcd(typename pcl::PointCloud<PointT>::Ptr cloud, std::string file);
 
