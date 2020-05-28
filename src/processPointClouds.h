@@ -19,7 +19,7 @@
 #include <ctime>
 #include <chrono>
 #include "render/box.h"
-#include "quiz/cluster/kdtree.h"
+#include "kdtree.h"
 
 template<typename PointT>
 class ProcessPointClouds {
